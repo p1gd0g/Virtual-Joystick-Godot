@@ -15,8 +15,6 @@ anchor_left = 1.0
 anchor_right = 1.0
 margin_left = -250.0
 margin_right = -50.0
-joystick_mode = 1
-use_input_actions = false
 
 [node name="Icon" type="Sprite" parent="."]
 position = Vector2( 512, 300 )
