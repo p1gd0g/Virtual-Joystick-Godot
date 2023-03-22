@@ -4,15 +4,17 @@ using System;
 public class VirtualJoystick : Control
 {
 
-
     // export(Color) var pressed_color := Color.gray
+    [Export]
     public Color pressed_color = Colors.Gray;
 
     // export(float, 0, 200, 1) var deadzone_size : float = 10
+    [Export]
     public float deadzone_size = 10;
 
 
     // export(float, 0, 500, 1) var clampzone_size : float = 75
+    [Export]
     public float clampzone_size = 75;
 
     // enum JoystickMode {FIXED, DYNAMIC}
@@ -23,6 +25,7 @@ public class VirtualJoystick : Control
 
 
     // export(JoystickMode) var joystick_mode := JoystickMode.FIXED
+    [Export]
     public JoystickMode joystick_mode = JoystickMode.FIXED;
 
     // enum VisibilityMode {ALWAYS , TOUCHSCREEN_ONLY }
@@ -32,9 +35,11 @@ public class VirtualJoystick : Control
     }
 
     // export(VisibilityMode) var visibility_mode := VisibilityMode.ALWAYS
+    [Export]
     public VisibilityMode visibility_mode = VisibilityMode.ALWAYS;
 
     // export var use_input_actions := true
+    [Export]
     public bool use_input_actions = true;
 
 
@@ -43,9 +48,13 @@ public class VirtualJoystick : Control
     // export var action_up := "ui_up"
     // export var action_down := "ui_down"
 
+    [Export]
     public string action_left = "ui_left";
+    [Export]
     public string action_right = "ui_right";
+    [Export]
     public string action_up = "ui_up";
+    [Export]
     public string action_down = "ui_down";
 
 
@@ -53,8 +62,24 @@ public class VirtualJoystick : Control
 
     bool _pressed = false;
 
+    public bool _isPressed
+    {
+        get
+        {
+            return _pressed;
+        }
+    }
+
     // var _output := Vector2.ZERO setget , get_output
     Vector2 _output = Vector2.Zero;
+
+    public Vector2 _getOutput
+    {
+        get
+        {
+            return _output;
+        }
+    }
 
     // var _touch_index : int = -1
     int _touch_index = -1;
@@ -92,9 +117,6 @@ public class VirtualJoystick : Control
     public override void _Ready()
     {
         onReady();
-
-
-
 
         if (!OS.HasTouchscreenUiHint() && visibility_mode == VisibilityMode.TOUCHSCREEN_ONLY)
         {
@@ -202,7 +224,7 @@ public class VirtualJoystick : Control
 
         var center = _base.RectGlobalPosition + _base_radius;
         var vector = point - center;
-        vector = vector.Clamped(clampzone_size);
+        vector = vector.LimitLength(clampzone_size);
 
         // _move_tip(center + vector)
 
@@ -237,6 +259,7 @@ public class VirtualJoystick : Control
 
     void moveTip(Vector2 point)
     {
+        GD.Print("moveTip", point);
         // _tip.rect_global_position = new_position - _tip.rect_pivot_offset * _base.get_global_transform_with_canvas().get_scale()
         _tip.RectGlobalPosition = point - _tip.RectPivotOffset * _base.GetGlobalTransformWithCanvas().Scale;
     }
